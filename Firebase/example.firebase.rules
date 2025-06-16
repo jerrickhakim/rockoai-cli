@@ -1,0 +1,42 @@
+rules_version = '2';
+
+service cloud.firestore {
+	match /databases/{database}/documents {
+
+    // Verify user has merchant role
+
+    function doesUserHaveMerchantRole(role, merchantId) {
+      let bool = get(/databases/$(database)/documents/merchants/$(merchantId)/users/$(request.auth.uid)).data[role];
+      return bool || request.auth.token.admin == true; 
+    }
+
+    // verify user has merchant or venue role
+    function doesUserHaveTenantRole(role, id, path) {
+      let bool = get(/databases/$(database)/documents/$(path)/$(id)/users/$(request.auth.uid)).data[role];
+      return bool;
+    } 
+
+
+    function verifyTenantRole(tenant, projectId) {
+      let ref = get(/databases/$(database)/documents/$(tenant)/$(projectId));
+      return isAuthenticated() &&
+             ref.data != null &&
+             ref.data.users != null &&
+             projectDoc.data.users[request.auth.uid] == true;
+    }
+
+    // Users Details
+    match /users/{userId} {
+      allow create: if false;
+      allow read: if request.auth.uid == userId;
+ 			allow update: if
+      request.resource.data.diff(resource.data).affectedKeys()
+        .hasAny(["firstName"]) || 
+        request.resource.data.diff(resource.data).affectedKeys()
+        .hasAny(["lastName"]) || 
+        request.resource.data.diff(resource.data).affectedKeys()
+        .hasAny(["phone"]) || request.resource.data.diff(resource.data).affectedKeys().size() == 0;
+      allow delete: if false;
+    }
+  }
+}

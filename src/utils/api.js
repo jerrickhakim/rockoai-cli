@@ -73,6 +73,37 @@ const pullProject = async (projectName) => {
   return apiRequest(`/api/projects/${encodeURIComponent(projectName)}/cli`, { method: "GET" });
 };
 
+const getProjectZip = async (projectName) => {
+  const token = getToken();
+
+  if (!token) {
+    throw new Error("Authentication required. Please run `rockoai login` first.");
+  }
+
+  const url = `${API_BASE_URL}/api/projects/${encodeURIComponent(projectName)}/cli/zip`;
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    let errorMessage;
+    try {
+      const errorData = await response.json();
+      errorMessage = errorData.message || errorData.error || `Request failed with status ${response.status}`;
+    } catch (e) {
+      errorMessage = `Request failed with status ${response.status}`;
+    }
+    throw new Error(errorMessage);
+  }
+
+  // Return the response buffer for zip file
+  return await response.buffer();
+};
+
 /**
  * Push project files
  * @param {string} projectName - Name of the project to push
@@ -86,7 +117,7 @@ const pushProject = async (projectName, data) => {
     throw new Error("Authentication required. Please run `rockoai login` first.");
   }
 
-  const url = `${API_BASE_URL}/api/projects/${encodeURIComponent(projectName)}/cli`;
+  const url = `${API_BASE_URL}/api/projects/${encodeURIComponent(projectName)}/cli/zip`;
 
   // If we have a zip file, send it as form data
   if (data.zipFile) {
@@ -130,5 +161,6 @@ module.exports = {
   apiRequest,
   getProject,
   pullProject,
+  getProjectZip,
   pushProject,
 };

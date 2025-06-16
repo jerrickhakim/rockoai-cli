@@ -3,7 +3,9 @@
 const { program } = require("commander");
 const { login, logout } = require("../src/commands/auth");
 const { pull } = require("../src/commands/pull");
+const { pullZip } = require("../src/commands/pull");
 const { push } = require("../src/commands/push");
+const { pushZip } = require("../src/commands/push");
 
 // Set up the CLI program
 program.name("rockoai").description("RockoAI CLI - Interact with the RockoAI platform").version("1.0.0");
@@ -15,10 +17,14 @@ program.command("login").description("Authenticate with RockoAI").action(login);
 program.command("logout").description("Logout from RockoAI").action(logout);
 
 // Pull command
-program.command("pull").description("Pull a project from RockoAI").option("-p, --project <project>", "Project name to pull").action(pull);
+program
+  .command("pull")
+  .description("Pull a project from RockoAI")
+  .option("-p, --project <project>", "Project name to pull")
+  .action(pullZip);
 
 // Push command
-program.command("push").description("Push project to RockoAI").option("-p, --project <project>", "Project ID to push to").action(push);
+program.command("push").description("Push project to RockoAI").option("-p, --project <project>", "Project ID to push to").action(pushZip);
 
 // Parse command line arguments
 program.parse(process.argv);
