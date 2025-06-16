@@ -188,7 +188,7 @@ const pullZip = async (options) => {
       }
 
       if (shouldCreateSubdir) {
-        targetDir = path.join(currentDir, projectName);
+        targetDir = path.join(currentDir, `RockoAI-${projectName}`);
         await fs.ensureDir(targetDir);
         console.log(chalk.yellow(`\nPulling into subdirectory: ${chalk.cyan(projectName)}`));
       }
@@ -229,6 +229,8 @@ const extractZip = (zipBuffer, targetDir) => {
   return new Promise((resolve, reject) => {
     let fileCount = 0;
     let folderCount = 0;
+
+    // 1
 
     yauzl.fromBuffer(zipBuffer, { lazyEntries: true }, (err, zipfile) => {
       if (err) {

@@ -1,6 +1,6 @@
 # RockoAI CLI
 
-A command-line interface for interacting with the RockoAI platform.
+RockoAI is a browser-based AI-assisted code editing platform. We believe you should never be locked into any platform when it comes to your tech stack choice. Therefore, we offer a way for you to pull your codebase and push it back to RockoAI whenever you want.
 
 ## Installation
 
@@ -39,7 +39,7 @@ This will open a browser window where you can log in to your RockoAI account. Af
 Pull a project from RockoAI directly into your current directory:
 
 ```bash
-rockoai pull -p <project-name>
+rockoai pull -p <project-id>
 ```
 
 This will download all project files into your current working directory.
@@ -89,4 +89,5 @@ ISC
    If so, pass
 
 3. If not, create a folder with the project name and put there
+
 # rockoai-cli
