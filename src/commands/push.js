@@ -62,7 +62,6 @@ const pushZip = async (options) => {
 
     spinner.succeed(`Successfully pushed project to ${chalk.cyan(projectId)}`);
     console.log(`  - ${chalk.green(filePaths.length)} files archived and uploaded`);
-    console.log(`  - ${chalk.green("Including node_modules")} from all nested paths`);
   } catch (error) {
     spinner.fail(`Failed to push project: ${error.message}`);
     process.exit(1);
